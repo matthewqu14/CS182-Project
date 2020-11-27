@@ -59,7 +59,7 @@ for tweet in tweets:
 
     if np.any(vector):
         vector /= word_count
-        vector = np.append(vector, 1)
+        vector = np.append(vector, 0)
         all_vectors = all_vectors.append(pd.DataFrame(vector).T, ignore_index=True)
 
 all_vectors.rename(columns={50: "Classification"}, inplace=True)
