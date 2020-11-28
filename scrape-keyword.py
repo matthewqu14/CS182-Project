@@ -1,10 +1,9 @@
 import twint
 
-# Scrape for tweets
+# Scrape for normal (non-depressive) tweets
 
 # Configuration
 config = twint.Config()
-# config.Username = "depressingmsgs"
 config.Search = "I"
 config.Since = "2019-11-18"
 config.Limit = 10000
