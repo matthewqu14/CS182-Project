@@ -11,9 +11,9 @@ from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
 # choose between 25, 50, 100, 200
-VECTOR_DIMENSION = 50
+VECTOR_DIMENSION = 200
 MODEL_NAME = "glove-twitter-" + str(VECTOR_DIMENSION)
-FILE = "all_normal_tweets.csv"
+FILE = "sample_depressed_tweets.csv"
 
 # Setup commands
 # nltk.download('stopwords')
@@ -59,9 +59,9 @@ for tweet in tweets:
 
     if np.any(vector):
         vector /= word_count
-        vector = np.append(vector, 0)
+        vector = np.append(vector, 1)
         all_vectors = all_vectors.append(pd.DataFrame(vector).T, ignore_index=True)
 
-all_vectors.rename(columns={50: "Classification"}, inplace=True)
+all_vectors.rename(columns={VECTOR_DIMENSION: "Classification"}, inplace=True)
 
-all_vectors.to_csv(FILE.replace("tweets", "vectors"))
+all_vectors.to_csv(FILE.replace("tweets", f"vectors_{VECTOR_DIMENSION}"))
