@@ -7,7 +7,7 @@ import re
 import os
 import contractions
 import ftfy
-from nltk.tokenize import word_tokenize
+import spacy
 from nltk.corpus import stopwords
 
 # setup command - run only once
@@ -17,6 +17,9 @@ from nltk.corpus import stopwords
 outdir = "./vectors"
 if not os.path.exists(outdir):
     os.mkdir(outdir)
+
+# download model using command "python -m spacy download en_core_web_sm"
+nlp = spacy.load("en_core_web_sm")
 
 files = ["all_normal_tweets.csv", "all_depressed_tweets.csv"]
 dimensions = [25, 50, 100, 200]
@@ -37,7 +40,7 @@ for i in range(2):  # iterate through files, using index i as classification of 
         # load model if downloaded locally
         model = KeyedVectors.load(f"models/{MODEL_NAME}.model", mmap="r")
 
-        # create dataframe
+        # create DataFrame
         tweets = pd.read_csv(FILE)["tweet"]
         all_vectors = pd.DataFrame()
 
@@ -61,8 +64,8 @@ for i in range(2):  # iterate through files, using index i as classification of 
             tweet = re.sub("[^\w\s]", "", tweet).lower()
 
             # remove common words (stop words)
-            words = word_tokenize(tweet)
-            words = [word for word in words if word not in stopwords.words("english")]
+            words = nlp(tweet)
+            words = [word.lemma_ for word in words if word.lemma_ not in stopwords.words("english")]
 
             for word in words:
                 if word in model.vocab:
